@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Calculatrice</title>
+    <link rel="icon" href="calc.png">
+    <link rel="stylesheet" href="calculatrice.css">
+
+    <script src="calculatrice.js"></script>
+</head>
+<body>
+
+    <div id="resultat"></div>
+
+    <div class="calculator">
+      <input type="text" id="result" readonly />
+      <input type="text" id="input" readonly />
+
+      <input type="button" value="(" onclick="calcul('(')" />
+      <input type="button" value=")" onclick="calcul(')')" />
+      <input type="button" value="C" class="clear" onclick="clearInput()" />
+      <input type="button" value="/" class="operator" onclick="calcul('/')" />
+
+      <input type="button" value="7" onclick="calcul('7')" />
+      <input type="button" value="8" onclick="calcul('8')" />
+      <input type="button" value="9" onclick="calcul('9')" />
+      <input type="button" value="*" class="operator" onclick="calcul('*')" />
+
+      <input type="button" value="4" onclick="calcul('4')" />
+      <input type="button" value="5" onclick="calcul('5')" />
+      <input type="button" value="6" onclick="calcul('6')" />
+      <input type="button" value="-" class="operator" onclick="calcul('-')" />
+
+      <input type="button" value="1" onclick="calcul('1')" />
+      <input type="button" value="2" onclick="calcul('2')" />
+      <input type="button"value="3" onclick="calcul('3')" />
+      <input type="button" value="+" class="operator" onclick="calcul('+')" />
+
+      <input type="button" value="0" onclick="calcul('0')" />
+      <input type="button" value="." onclick="calcul('.')" />
+      <input type="button" value="=" class="operator" onclick="resultat()" />
+      <input type="button" value="?" id="surpise" onclick="surprise()"/>
+    </div>
+
+</body>
+</html>
