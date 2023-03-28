@@ -41,13 +41,15 @@ class BaseCalculator {
   undo() {
     if (this.actions.length > 0) {
       const lastAction = this.actions.pop();
-      if (lastAction === "=") {
-        const lastResult = this.results.pop(); // Récupérer le dernier résultat
-        if (this.actions.length === 0) {
-          // Si la liste des actions est vide, afficher le dernier résultat
+
+      if (lastAction === "=") {// Récupérer le dernier résultat
+        const lastResult = this.results.pop(); 
+
+        if (this.actions.length === 0) { // Si la liste des actions est vide, afficher le dernier résultat
           this.result.value = lastResult;
-        } else {
-          // Sinon, reconstruire le calcul en utilisant la liste des actions
+        } 
+
+        else { // Sinon, reconstruire le calcul en utilisant la liste des actions
           let currentInput = "";
           for (let i = this.actions.length - 1; i >= 0; i--) {
             if (this.actions[i] === "=") {
@@ -60,11 +62,30 @@ class BaseCalculator {
           this.lastResult = null;
         }
       } else {
-        // Retirer le dernier caractère de l'entrée
         this.input.value = this.input.value.slice(0, -1);
       }
     }
   }
 }
 
+
 const baseCalculator = new BaseCalculator();
+
+
+
+
+// Pour que ça marche aussi avec les touches du clavier : 
+
+document.addEventListener("keydown", (event) => {
+            const key = event.key;
+            if (/[0-9+\-*/().]/.test(key)) {
+                event.preventDefault();
+                baseCalculator.calcul(key);
+            } else if (key === "Enter") {
+                event.preventDefault();
+                baseCalculator.resultat();
+            } else if (key === "Backspace") {
+                event.preventDefault();
+                baseCalculator.undo();
+            }
+        });
