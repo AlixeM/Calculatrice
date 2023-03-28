@@ -15,5 +15,6 @@ Etape 2️⃣ de la calculatrice realisée en 30min avec :
 - La class BaseCalculator
 - le bouton ⌫ permettant un retour arrière en utilisant les listes
 - Des ajouts pour gérer les exceptions
+- Ajout de la possibilité de taper au clavier
 
 
