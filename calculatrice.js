@@ -5,39 +5,6 @@ class BaseCalculator {
     this.result = document.getElementById("result");
     this.actions = []; // Liste pour stocker les actions
     this.results = []; // Liste pour stocker les résultats
-<<<<<<< HEAD
-  }
-
-  calcul(value) {
-    if (this.lastResult !== null) {
-      this.input.value = "";
-      this.lastResult = null;
-    }
-    this.input.value += value;
-    this.actions.push(value); // Ajouter l'action à la liste
-  }
-
-  clearInput() {
-    this.input.value = "";
-    this.lastResult = null;
-    this.actions = []; // Vider la liste des actions
-    this.results = []; // Vider la liste des résultats
-  }
-
-  resultat() {
-    if (this.input.value === "") {
-      this.result.value = "no calcul"; // Afficher "no calcul" si l'entrée est vide
-      return;
-    }
-    var result = eval(this.input.value);
-    const expression = this.input.value;
-    this.lastResult = result;
-    this.actions.push("=");
-    this.results.push(result);
-    this.result.value = expression + " = " + result; // Afficher le calcul et le résultat dans "result"
-    this.input.value = "";
-  }
-=======
   }
 
   calcul(value) {
@@ -77,26 +44,12 @@ class BaseCalculator {
 
       if (lastAction === "=") {// Récupérer le dernier résultat
         const lastResult = this.results.pop(); 
->>>>>>> main
 
         if (this.actions.length === 0) { // Si la liste des actions est vide, afficher le dernier résultat
           this.result.value = lastResult;
         } 
 
-<<<<<<< HEAD
-  undo() {
-    if (this.actions.length > 0) {
-      const lastAction = this.actions.pop();
-      if (lastAction === "=") {
-        const lastResult = this.results.pop(); // Récupérer le dernier résultat
-        if (this.actions.length === 0) {
-          // Si la liste des actions est vide, afficher le dernier résultat
-          this.result.value = lastResult;
-        } else {
-          // Sinon, reconstruire le calcul en utilisant la liste des actions
-=======
         else { // Sinon, reconstruire le calcul en utilisant la liste des actions
->>>>>>> main
           let currentInput = "";
           for (let i = this.actions.length - 1; i >= 0; i--) {
             if (this.actions[i] === "=") {
@@ -109,19 +62,12 @@ class BaseCalculator {
           this.lastResult = null;
         }
       } else {
-<<<<<<< HEAD
-        // Retirer le dernier caractère de l'entrée
-=======
->>>>>>> main
         this.input.value = this.input.value.slice(0, -1);
       }
     }
   }
 }
 
-<<<<<<< HEAD
-const baseCalculator = new BaseCalculator();
-=======
 
 const baseCalculator = new BaseCalculator();
 
@@ -143,4 +89,3 @@ document.addEventListener("keydown", (event) => {
                 baseCalculator.undo();
             }
         });
->>>>>>> main
