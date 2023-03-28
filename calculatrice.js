@@ -1,28 +1,70 @@
-var lastResult = null;
-
-function calcul(value) {
-  if (lastResult !== null) {
-    document.getElementById("input").value = "";
-    lastResult = null;
+class BaseCalculator {
+  constructor() {
+    this.lastResult = null;
+    this.input = document.getElementById("input");
+    this.result = document.getElementById("result");
+    this.actions = []; // Liste pour stocker les actions
+    this.results = []; // Liste pour stocker les résultats
   }
-  document.getElementById("input").value += value;
+
+  calcul(value) {
+    if (this.lastResult !== null) {
+      this.input.value = "";
+      this.lastResult = null;
+    }
+    this.input.value += value;
+    this.actions.push(value); // Ajouter l'action à la liste
+  }
+
+  clearInput() {
+    this.input.value = "";
+    this.lastResult = null;
+    this.actions = []; // Vider la liste des actions
+    this.results = []; // Vider la liste des résultats
+  }
+
+  resultat() {
+    if (this.input.value === "") {
+      this.result.value = "no calcul"; // Afficher "no calcul" si l'entrée est vide
+      return;
+    }
+    var result = eval(this.input.value);
+    const expression = this.input.value;
+    this.lastResult = result;
+    this.actions.push("=");
+    this.results.push(result);
+    this.result.value = expression + " = " + result; // Afficher le calcul et le résultat dans "result"
+    this.input.value = "";
+  }
+
+
+  undo() {
+    if (this.actions.length > 0) {
+      const lastAction = this.actions.pop();
+      if (lastAction === "=") {
+        const lastResult = this.results.pop(); // Récupérer le dernier résultat
+        if (this.actions.length === 0) {
+          // Si la liste des actions est vide, afficher le dernier résultat
+          this.result.value = lastResult;
+        } else {
+          // Sinon, reconstruire le calcul en utilisant la liste des actions
+          let currentInput = "";
+          for (let i = this.actions.length - 1; i >= 0; i--) {
+            if (this.actions[i] === "=") {
+              break;
+            }
+            currentInput = this.actions[i] + currentInput;
+          }
+          this.result.value = ""; // Effacer le résultat affiché
+          this.input.value = currentInput; // Afficher le calcul reconstruit
+          this.lastResult = null;
+        }
+      } else {
+        // Retirer le dernier caractère de l'entrée
+        this.input.value = this.input.value.slice(0, -1);
+      }
+    }
+  }
 }
 
-function clearInput() {
-  document.getElementById("input").value = "";
-  lastResult = null;
-}
-
-function resultat() {
-  var input = document.getElementById("input").value;
-  var result = eval(input);
-  document.getElementById("result").value = input + " = " + result;
-  document.getElementById("input").value = "";
-  lastResult = result;
-}
-
-
-
-function surprise(){
-  window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-}
+const baseCalculator = new BaseCalculator();

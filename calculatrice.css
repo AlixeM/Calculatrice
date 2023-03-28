@@ -4,7 +4,7 @@
 
 body {
     margin-top: 30px;
-    background-color: #D6BCF6;
+    background-color: #E09FE1;
     font-family: Arial, sans-serif;
     font-size: 16px;
 }
@@ -72,4 +72,15 @@ body {
     text-align: right;
     border: 1px solid black;
     background-color: #bcbcbc;
+    overflow-y: scroll;
+    display: block; 
+}
+
+.calculator input[type="button"]#backspace {
+    background-color: #ffcc00;
+    color: white;
+}
+
+.calculator input[type="button"]#backspace:hover {
+    background-color: #ffc107;
 }
