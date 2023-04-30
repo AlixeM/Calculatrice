@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 class BaseCalculator {
   constructor() {
     this.lastResult = null;
@@ -28,39 +30,49 @@ class BaseCalculator {
       this.result.value = "no calcul"; // Afficher "no calcul" si l'entrée est vide
       return;
     }
-    var result = eval(this.input.value);
     const expression = this.input.value;
-    this.lastResult = result;
-    this.actions.push("=");
-    this.results.push(result);
-    this.result.value = expression + " = " + result; // Afficher le calcul et le résultat dans "result"
-    this.input.value = "";
+    axios
+      .post('http://localhost:3000/annonces', { expression })
+      .then(response => {
+        const result = response.data.result;
+        this.lastResult = result;
+        this.actions.push("=");
+        this.results.push(result);
+        this.result.value = expression + " = " + result; // Afficher le calcul et le résultat dans "result"
+        this.input.value = "";
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
-
 
   undo() {
     if (this.actions.length > 0) {
       const lastAction = this.actions.pop();
 
-      if (lastAction === "=") {// Récupérer le dernier résultat
-        const lastResult = this.results.pop(); 
-
-        if (this.actions.length === 0) { // Si la liste des actions est vide, afficher le dernier résultat
-          this.result.value = lastResult;
-        } 
-
-        else { // Sinon, reconstruire le calcul en utilisant la liste des actions
-          let currentInput = "";
-          for (let i = this.actions.length - 1; i >= 0; i--) {
-            if (this.actions[i] === "=") {
-              break;
+      if (lastAction === "=") { // Récupérer le dernier résultat
+        axios
+          .delete('http://localhost:3000/annonces/last')
+          .then(response => {
+            const lastResult = response.data.result;
+            if (this.actions.length === 0) { // Si la liste des actions est vide, afficher le dernier résultat
+              this.result.value = lastResult;
+            } else { // Sinon, reconstruire le calcul en utilisant la liste des actions
+              let currentInput = "";
+              for (let i = this.actions.length - 1; i >= 0; i--) {
+                if (this.actions[i] === "=") {
+                  break;
+                }
+                currentInput = this.actions[i] + currentInput;
+              }
+              this.result.value = ""; // Effacer le résultat affiché
+              this.input.value = currentInput; // Afficher le calcul reconstruit
+              this.lastResult = null;
             }
-            currentInput = this.actions[i] + currentInput;
-          }
-          this.result.value = ""; // Effacer le résultat affiché
-          this.input.value = currentInput; // Afficher le calcul reconstruit
-          this.lastResult = null;
-        }
+          })
+          .catch(error => {
+            console.error(error);
+          });
       } else {
         this.input.value = this.input.value.slice(0, -1);
       }
@@ -68,24 +80,19 @@ class BaseCalculator {
   }
 }
 
-
 const baseCalculator = new BaseCalculator();
 
-
-
-
-// Pour que ça marche aussi avec les touches du clavier : 
-
-document.addEventListener("keydown", (event) => {
-            const key = event.key;
-            if (/[0-9+\-*/().]/.test(key)) {
-                event.preventDefault();
-                baseCalculator.calcul(key);
-            } else if (key === "Enter") {
-                event.preventDefault();
-                baseCalculator.resultat();
-            } else if (key === "Backspace") {
-                event.preventDefault();
-                baseCalculator.undo();
-            }
-        });
+// Pour que ça marche aussi avec les touches du clavier :
+document.addEventListener("keydown", event => {
+  const key = event.key;
+  if (/[0-9+\-*/().]/.test(key)) {
+    event.preventDefault();
+    baseCalculator.calcul(key);
+  } else if (key === "Enter") {
+    event.preventDefault();
+    baseCalculator.resultat();
+  } else if (key === "Backspace") {
+    event.preventDefault();
+    baseCalculator.undo();
+  }
+});
